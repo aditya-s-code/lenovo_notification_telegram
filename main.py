@@ -45,5 +45,7 @@ def send_message(msg):
     requests.post(url, data=payload)
 
 # ✅ Run both Flask and the bot
+send_message("✅ Test: Lenovo Bot is working!")
+
 threading.Thread(target=check_lenovo).start()
 app.run(host="0.0.0.0", port=8080)
