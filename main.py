@@ -9,7 +9,7 @@ import logging
 # ==================== CONFIG ====================
 
 BOT_TOKEN = "7368887153:AAHs8C2IVjTi7RSAqlorG86x3TMkDm8TdMM"
-CHAT_ID = "7368887153"
+CHAT_ID = "1774833565"
 URL_TO_MONITOR = "https://www.lenovo.com/in/outletin/en/laptops/"
 CHECK_INTERVAL = 60  # in seconds
 
