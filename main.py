@@ -3,20 +3,19 @@ import requests
 from bs4 import BeautifulSoup
 from flask import Flask
 import threading
-import os
 
-# ✅ Your actual Telegram Bot Token
+# ✅ Your correct Telegram bot token and chat ID
 BOT_TOKEN = "7368887153:AAHs8C2IVjTi7RSAqlorG86x3TMkDm8TdMM"
+CHAT_ID = "1774833565"
 
-# ✅ Your actual Telegram Chat ID (use numeric ID, not the token again)
-CHAT_ID = "7368887153"  # ✅ This should just be your user/chat ID, not the token
-
+# ✅ Create Flask app to keep Render happy
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot is alive!"
+    return "✅ Bot is alive!"
 
+# ✅ This checks Lenovo's Outlet every 15 minutes
 def check_lenovo():
     old_titles = []
     while True:
@@ -39,17 +38,12 @@ def check_lenovo():
 
         time.sleep(900)  # 15 minutes
 
+# ✅ This sends Telegram messages
 def send_message(msg):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {"chat_id": CHAT_ID, "text": msg}
-    try:
-        requests.post(url, data=payload)
-    except:
-        pass
+    requests.post(url, data=payload)
 
-# Run the checker in the background
-threading.Thread(target=check_lenovo, daemon=True).start()
-
-# Use dynamic port for Render
-port = int(os.environ.get("PORT", 8080))
-app.run(host="0.0.0.0", port=port)
+# ✅ Run both Flask and the bot
+threading.Thread(target=check_lenovo).start()
+app.run(host="0.0.0.0", port=8080)
