@@ -1,0 +1,44 @@
+import time
+import requests
+from bs4 import BeautifulSoup
+from flask import Flask
+import threading
+
+BOT_TOKEN = "7368887153:AAHs8C2IVjTi7RSAqlorG86x3TMkDm8TdMM"
+CHAT_ID = "7368887153:AAHs8C2IVjTi7RSAqlorG86x3TMkDm8TdMM"
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is alive!"
+
+def check_lenovo():
+    old_titles = []
+    while True:
+        try:
+            url = "https://www.lenovo.com/in/outletin/en/laptops/"
+            headers = {"User-Agent": "Mozilla/5.0"}
+            html = requests.get(url, headers=headers).text
+            soup = BeautifulSoup(html, "html.parser")
+            products = soup.select("div.product-info__title")
+
+            new_titles = [p.text.strip() for p in products]
+
+            for title in new_titles:
+                if title not in old_titles:
+                    send_message(f"🆕 New Lenovo laptop: {title}")
+            old_titles = new_titles
+
+        except Exception as e:
+            send_message(f"⚠️ Error: {str(e)}")
+
+        time.sleep(900)  # 15 minutes
+
+def send_message(msg):
+    url = f"https://api.telegram.org/bot7368887153:AAHs8C2IVjTi7RSAqlorG86x3TMkDm8TdMM/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": msg}
+    requests.post(url, data=payload)
+
+threading.Thread(target=check_lenovo).start()
+app.run(host="0.0.0.0", port=8080)
